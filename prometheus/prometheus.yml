@@ -37,10 +37,10 @@ scrape_configs:
           service: xx_service
     metrics_path: /prom/metrics
 
-  # node
+  # node-export
   - job_name: "node"
     scrape_interval: "15s"
     static_configs:
-    - targets: ['xx:9100']
+    - targets: ['node-exporter:9100']
       labels:
-        name: 'node_1'
+        name: 'watchman-node'
