@@ -1,0 +1,42 @@
+version: "3.1"
+
+volumes:
+    prometheus_data: {}
+    grafana_data: {}
+
+networks:
+  watchman:
+
+services:
+
+  loki:
+    image: grafana/loki:master
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki/:/etc/loki/
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - watchman
+    restart: always
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+      - prometheus_data:/prometheus
+    networks:
+      - watchman
+    restart: always
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    networks:
+      - watchman
+    volumes:
+      - grafana_data:/var/lib/grafana
+    restart: always
